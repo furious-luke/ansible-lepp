@@ -1,0 +1,17 @@
+[production]
+192.168.0.49
+192.168.0.50
+
+[development]
+localhost ansible_connection=local
+
+[all:children]
+production
+development
+
+[all:vars]
+site_name: my_site
+
+[production:vars]
+remote_user: my_site
+repository_url: git@bitbucket.org:me/my_site.git

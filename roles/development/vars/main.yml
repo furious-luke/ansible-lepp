@@ -1,0 +1,3 @@
+---
+deployment: development
+site_root: "{{ inventory_dir }}/.."

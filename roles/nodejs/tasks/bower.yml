@@ -1,0 +1,29 @@
+---
+
+- name: setup bower directory configuration
+  template: src=bowerrc_dir dest={{ site_root }}/.bowerrc owner={{ ansible_env.USER }}
+# group={{ ansible_env.USER }} mode=0664
+
+- name: determine bower base packages
+  shell: cat {{ site_root }}/requirements/bower.base
+  register: bower_base_pkgs
+
+- name: install base bower dependencies
+  command: bower install {{ item }} chdir={{ site_root }}
+  with_items: "{{ bower_base_pkgs.stdout_lines }}"
+  environment:
+    PATH: "{{ site_root }}/environ/node_modules/.bin:{{ ansible_env.PATH }}"
+
+- name: determine bower packages
+  shell: cat {{ site_root }}/requirements/bower.{{ deployment }}
+  register: bower_pkgs
+
+- name: install bower dependencies
+  command: bower install {{ item }} chdir={{ site_root }}
+  with_items: "{{ bower_pkgs.stdout_lines }}"
+  environment:
+    PATH: "{{ site_root }}/environ/node_modules/.bin:{{ ansible_env.PATH }}"
+
+- name: setup bower configuration
+  template: src=bowerrc dest={{ site_root }}/.bowerrc owner={{ ansible_env.USER }}
+# group={{ ansible_env.USER }} mode=0664

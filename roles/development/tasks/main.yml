@@ -1,0 +1,9 @@
+---
+
+- name: check for existence of development media
+  stat: path={{ site_root }}/{{ site_name }}/main/fixtures/media.tgz
+  register: media_archive
+
+- name: extract development media
+  unarchive: src={{ site_root }}/{{ site_name }}/main/fixtures/media.tgz dest={{ site_root }}/{{ site_name }} copy=no
+  when: media_archive.stat.exists == True

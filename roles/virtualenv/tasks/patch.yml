@@ -1,0 +1,17 @@
+---
+
+- name: determine Python directory name
+  shell: basename `ls -d {{ site_root }}/environ/lib/python3*`
+  register: python_dir
+
+- name: list patch files
+  shell: ls {{ site_root }}/patches/*.patch
+  register: patch_files
+
+- name: patch Python modules
+  patch:
+    basedir: "{{ site_root }}/environ/lib/{{ python_dir.stdout }}/site-packages"
+    remote_src: True
+    src: "{{ item }}"
+    strip: 1
+  with_items: "{{ patch_files.stdout_lines }}"

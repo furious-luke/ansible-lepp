@@ -1,0 +1,12 @@
+---
+
+- name: apply development configuration
+  hosts: development
+  roles:
+    - development
+
+- name: apply production configuration
+  hosts: production
+  remote_user: {{ remote_user }}
+  roles:
+    - production
