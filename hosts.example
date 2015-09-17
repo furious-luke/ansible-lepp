@@ -10,8 +10,8 @@ production
 development
 
 [all:vars]
-site_name: my_site
+site_name=my_site
 
 [production:vars]
-remote_user: my_site
-repository_url: git@bitbucket.org:me/my_site.git
+remote_user=my_site
+repository_url=git@bitbucket.org:me/my_site.git

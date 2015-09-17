@@ -38,7 +38,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser('Setup Django Python environment.')
     parser.add_argument('--deploy', '-d', choices=['development', 'production'], default='development',
                         help='deployment type')
-    parser.add_argument('--disable-become', action='store_false', help='disable promotion')
+    parser.add_argument('--disable-become', action='store_true', help='disable promotion')
     args = parser.parse_args()
     args.deploy = args.deploy.lower()
     return args
@@ -48,6 +48,6 @@ if __name__ == '__main__':
     args = parse_arguments()
 
     hosts = os.path.join(os.getcwd(), 'hosts')
-    become = ' --ask-become' if not args.disable_become else ''
+    become = ' --ask-become' if (not args.disable_become) else ''
     os.chdir(PLAYBOOK_PATH)
-    run('ansible-playbook -i %s -l %s site.yml%s'%(hosts, args.deploy, become)
+    run('ansible-playbook -i %s -l %s site.yml%s'%(hosts, args.deploy, become))
