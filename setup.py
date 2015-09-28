@@ -18,8 +18,8 @@ def run(cmd, output=False):
         subprocess.check_call(cmd, shell=True)
 
 def check_ansible_version():
-    output = run('ansible-playbook --version', True)
     try:
+        output = run('ansible-playbook --version', True)
         ver = int(output.splitlines()[0].split()[1].decode().split('.')[0])
     except:
         sys.stdout.write('Unable to locate ansible.\n')
