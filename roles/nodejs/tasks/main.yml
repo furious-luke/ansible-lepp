@@ -1,3 +1,30 @@
 ---
-- include: nodejs.yml
-- include: bower.yml
+
+- block:
+  - name: install node packages (Ubuntu)
+    apt: name={{ item }} state=latest
+    with_items:
+      - nodejs
+      - npm
+
+  - name: softlink nodejs binary (Ubuntu)
+    file: src=/usr/bin/nodejs dest=/usr/bin/node owner=root group=root state=link
+
+  become: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: determine nodejs base packages
+  shell: cat {{ site_root }}/requirements/npm.base
+  register: npm_base_pkgs
+
+- name: install base nodejs dependencies
+  npm: name={{ item }} path={{ site_root }}/environ/node_modules
+  with_items: "{{ npm_base_pkgs.stdout_lines }}"
+
+- name: determine nodejs packages
+  shell: cat {{ site_root }}/requirements/npm.{{ deployment }}
+  register: npm_pkgs
+
+- name: install nodejs dependencies
+  npm: name={{ item }} path={{ site_root }}/environ/node_modules
+  with_items: "{{ npm_pkgs.stdout_lines }}"
