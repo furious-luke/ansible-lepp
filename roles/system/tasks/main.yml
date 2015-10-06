@@ -33,6 +33,8 @@
       - libssl-dev
       - libxml2-dev
       - libxslt1-dev
+      - libyaml-dev
+      - libjpeg-dev
 
   - name: install base packages (Ubuntu 14)
     become: yes
