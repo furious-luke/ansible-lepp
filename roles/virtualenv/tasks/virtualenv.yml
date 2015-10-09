@@ -28,4 +28,3 @@
   with_items:
     - export DJANGO_SETTINGS_MODULE={{ site_name }}.settings.{{ deployment }}
     - export PYTHONPATH={{ site_root }}/{{ site_name }}:$PYTHONPATH
-    - export PATH={{ site_root }}/environ/node_modules/.bin:$PATH

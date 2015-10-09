@@ -1,5 +1,5 @@
 ---
 dependencies:
-#  - { role: system }
-#  - { role: virtualenv }
+  - { role: system }
+  - { role: virtualenv }
   - { role: nodejs }

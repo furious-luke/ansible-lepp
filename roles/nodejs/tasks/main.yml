@@ -18,7 +18,7 @@
   register: npm_base_pkgs
 
 - name: install base nodejs dependencies
-  npm: name={{ item }} path={{ site_root }}/environ/node_modules
+  npm: name={{ item }} path={{ site_root }}/environ
   with_items: "{{ npm_base_pkgs.stdout_lines }}"
 
 - name: determine nodejs packages
@@ -26,5 +26,15 @@
   register: npm_pkgs
 
 - name: install nodejs dependencies
-  npm: name={{ item }} path={{ site_root }}/environ/node_modules
+  npm: name={{ item }} path={{ site_root }}/environ
   with_items: "{{ npm_pkgs.stdout_lines }}"
+
+- name: update virtual environment activation script
+  lineinfile:
+    state: present
+    dest: "{{ site_root }}/environ/bin/activate"
+    line: "{{ item  }}"
+    insertafter: EOF
+  with_items:
+    - export PATH={{ site_root }}/environ/node_modules/.bin:$PATH
+    - export NODE_PATH={{ site_root }}/environ/node_modules:$NODE_PATH
