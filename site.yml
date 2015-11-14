@@ -1,12 +1,17 @@
 ---
 
-- name: apply development configuration
-  hosts: development
-  roles:
-    - development
+# - hosts: all
+#   vars_prompt:
+#     - name: heroku_password
+#       prompt: Please enter your Heroku password
+#       private: yes
 
-- name: apply production configuration
-  hosts: production
-  remote_user: "{{ remote_user }}"
+- name: common configuration
+  hosts: all
   roles:
-    - production
+    - { role: system }
+    - { role: sshkey }
+    - { role: shell }
+    - { role: clone }
+    - { role: virtualenv }
+    - { role: nodejs }

@@ -1,6 +1,0 @@
----
-dependencies:
-  - { role: system }
-  - { role: clone }
-  - { role: virtualenv }
-  - { role: nodejs }

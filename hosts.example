@@ -1,6 +1,4 @@
 [production]
-192.168.0.49
-192.168.0.50
 
 [development]
 localhost ansible_connection=local
@@ -10,8 +8,13 @@ production
 development
 
 [all:vars]
-site_name=my_site
+# project_name=
+site_root=~/workspace/{{ inst_name }}
+# repository_url=git@github.com:---/{{ project_name }}
+
+[development:vars]
+deployment=development
 
 [production:vars]
-remote_user=my_site
-repository_url=git@bitbucket.org:me/my_site.git
+deployment=production
+# remote_user=

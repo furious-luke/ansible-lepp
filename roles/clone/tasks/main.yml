@@ -1,8 +1,0 @@
----
-
-- name: clone repository
-  git:
-   recursive: yes
-   repo: "{{ repository_url }}"
-   dest: "{{ site_root }}"
-   accept_hostkey: yes

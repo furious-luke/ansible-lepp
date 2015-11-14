@@ -1,3 +1,0 @@
----
-deployment: production
-site_root: "{{ ansible_env.HOME }}/{{ site_name }}"
