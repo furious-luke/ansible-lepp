@@ -7,8 +7,9 @@ __all__ = ['Ansible']
 
 class Ansible(object):
 
-    def __init__(self, run_path=None):
+    def __init__(self, run_path=None, site_path='site.yml'):
         self.run_path = run_path
+        self.site_path = site_path
 
     def __call__(self):
         self.check_ansible_version()
@@ -101,7 +102,8 @@ class Ansible(object):
     def run_ansible(self, cmd, args):
         if self.run_path:
             os.chdir(self.run_path)
-        cmd = 'ansible-playbook -i %s -l %s site.yml%s'%cmd
+        cmd = (cmd[0], cmd[1], self.site_path, cmd[2])
+        cmd = 'ansible-playbook -i %s -l %s %s%s'%cmd
         if args.dry_run:
             sys.stdout.write(cmd + '\n')
         else:
