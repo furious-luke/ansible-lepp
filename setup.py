@@ -75,14 +75,13 @@ class Ansible(object):
         parser.add_argument('--no-clone', '-c', action='store_true', help='do not clone the repository')
         parser.add_argument('--disable-become', action='store_true', help='disable promotion')
         parser.add_argument('--dry-run', action='store_true', help='show Ansible command only')
+        parser.add_argument('--verbose', '-v', action='store_true', help='verbosity')
         return parser
-
 
     def parse_arguments(self, parser):
         args = parser.parse_args()
         args.deploy = args.deploy.lower()
         return args
-
 
     def prepare_command(self, args):
         hosts = os.path.join(os.getcwd(), 'hosts')
@@ -104,6 +103,8 @@ class Ansible(object):
             os.chdir(self.run_path)
         cmd = (cmd[0], cmd[1], self.site_path, cmd[2])
         cmd = 'ansible-playbook -i %s -l %s %s%s'%cmd
+        if args.verbose:
+            cmd += ' -vvv'
         if args.dry_run:
             sys.stdout.write(cmd + '\n')
         else:

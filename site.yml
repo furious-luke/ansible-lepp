@@ -1,11 +1,5 @@
 ---
 
-# - hosts: all
-#   vars_prompt:
-#     - name: heroku_password
-#       prompt: Please enter your Heroku password
-#       private: yes
-
 - name: common configuration
   hosts: all
   roles:
