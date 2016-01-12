@@ -7,6 +7,15 @@
     - { role: sshkey }
     - { role: shell }
     - { role: clone }
+
+- name: common configuration
+  hosts: production
+  roles:
+    - { role: postgresql }
+
+- name: common configuration
+  hosts: all
+  roles:
     - { role: virtualenv }
     - { role: django }
     - { role: nodejs }
