@@ -8,7 +8,7 @@
     - { role: shell }
     - { role: clone }
 
-- name: common configuration
+- name: database configuration
   hosts: production
   roles:
     - { role: postgresql }
