@@ -1,10 +1,21 @@
 ---
 
-- name: common configuration
+- name: system configuration
   hosts: all
   roles:
     - { role: system }
     - { role: sshkey }
+
+- name: web configuration
+  hosts: production
+  roles:
+    - { role: web }
+#     - { role: nginx }
+#     - { role: uwsgi }
+
+- name: common configuration
+  hosts: all
+  roles:
     - { role: shell }
     - { role: clone }
 
@@ -19,3 +30,9 @@
     - { role: virtualenv }
     - { role: django }
     - { role: nodejs }
+
+- name: change ownership of installation
+  hosts: production
+  tasks:
+    - name: change ownership of repository
+      file: path={{ site_root }} recurse=yes owner={{ web_user }} group={{ web_group }} state=directory
