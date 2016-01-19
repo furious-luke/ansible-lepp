@@ -6,12 +6,10 @@
     - { role: system }
     - { role: sshkey }
 
-- name: web configuration
+- name: web setup
   hosts: production
   roles:
     - { role: web }
-#     - { role: nginx }
-#     - { role: uwsgi }
 
 - name: common configuration
   hosts: all
@@ -31,8 +29,30 @@
     - { role: django }
     - { role: nodejs }
 
-- name: change ownership of installation
+- name: final installation
   hosts: production
   tasks:
+
+    - name: migrate
+      shell: ./manage.py migrate
+      args:
+        chdir: "{{ site_root }}/{{ project_name }}"
+
+    - name: build static files
+      shell: grunt build
+      args:
+        chdir: "{{ site_root }"
+
+    - name: collect static files
+      shell: ./manage.py collectstatic
+      args:
+        chdir: "{{ site_root }"
+
     - name: change ownership of repository
       file: path={{ site_root }} recurse=yes owner={{ web_user }} group={{ web_group }} state=directory
+
+- name: web configuration
+  hosts: production
+  roles:
+    - { role: uwsgi }
+    - { role: nginx }
