@@ -33,20 +33,32 @@
   hosts: production
   tasks:
 
+    - name: set database URL
+      lineinfile:
+        state: present
+        dest: "{{ site_root }}/environ/bin/activate"
+        line: "{{ item }}"
+        insertafter: EOF
+      with_items:
+        - export DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
+
     - name: migrate
-      shell: ./manage.py migrate
+      shell: . ../environ/bin/activate && ./manage.py migrate
       args:
         chdir: "{{ site_root }}/{{ project_name }}"
+        executable: /bin/bash
 
     - name: build static files
-      shell: grunt build
+      shell: . environ/bin/activate && gulp build
       args:
-        chdir: "{{ site_root }"
+        chdir: "{{ site_root }}"
+        executable: /bin/bash
 
     - name: collect static files
-      shell: ./manage.py collectstatic
+      shell: . environ/bin/activate && ./manage.py collectstatic --no-input
       args:
-        chdir: "{{ site_root }"
+        chdir: "{{ site_root }}"
+        executable: /bin/bash
 
     - name: change ownership of repository
       file: path={{ site_root }} recurse=yes owner={{ web_user }} group={{ web_group }} state=directory
