@@ -9,6 +9,7 @@
 - name: web setup
   hosts: production
   roles:
+    - { role: postfix }
     - { role: web }
 
 - name: common configuration
