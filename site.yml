@@ -34,7 +34,7 @@
   hosts: production
   tasks:
 
-    - name: set database URL
+    - name: set database URL (virtualenv)
       lineinfile:
         state: present
         dest: "{{ site_root }}/environ/bin/activate"
@@ -42,6 +42,15 @@
         insertafter: EOF
       with_items:
         - export DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
+
+    - name: set database URL (uwsgi)
+      lineinfile:
+        state: present
+        dest: /etc/uwsgi/{{ project_name }}.ini
+        line: "{{ item }}"
+        insertafter: EOF
+      with_items:
+        - export env = DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
 
     - name: migrate
       shell: . ../environ/bin/activate && ./manage.py migrate
