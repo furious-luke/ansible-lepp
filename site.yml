@@ -59,7 +59,7 @@
         executable: /bin/bash
 
     - name: build static files
-      shell: . environ/bin/activate && gulp build
+      shell: . environ/bin/activate && gulp build --{{ deployment }}
       args:
         chdir: "{{ site_root }}"
         executable: /bin/bash
