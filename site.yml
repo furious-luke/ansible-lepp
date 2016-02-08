@@ -30,6 +30,12 @@
     - { role: django }
     - { role: nodejs }
 
+- name: web configuration
+  hosts: production
+  roles:
+    - { role: uwsgi }
+    - { role: nginx }
+
 - name: final installation
   hosts: production
   tasks:
@@ -50,7 +56,7 @@
         line: "{{ item }}"
         insertafter: EOF
       with_items:
-        - export env = DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
+        - env = DATABASE_URL=postgres://{{ project_name }}@localhost/{{ project_name }}
 
     - name: migrate
       shell: . ../environ/bin/activate && ./manage.py migrate
@@ -73,8 +79,4 @@
     - name: change ownership of repository
       file: path={{ site_root }} recurse=yes owner={{ web_user }} group={{ web_group }} state=directory
 
-- name: web configuration
-  hosts: production
-  roles:
-    - { role: uwsgi }
-    - { role: nginx }
+    - include: roles/nginx/tasks/enable.yml
